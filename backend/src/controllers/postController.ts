@@ -25,3 +25,9 @@ export const addComment = async (req: any, res: Response) => {
   await post.save();
   res.json(post);
 };
+
+export const deletePost = async (req: any, res: Response) => {
+  const post = await Post.findByIdAndDelete(req.params.id);
+  if (!post) return res.status(404).json({ message: 'Post not found' });
+  res.json({ message: 'Post deleted' });
+};

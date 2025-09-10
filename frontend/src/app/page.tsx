@@ -6,6 +6,7 @@ import HeroSection from "./components/HeroSection";
 import CommunitySection from "../components/Community/CommunityCard";
 import SponsorsSection from "../components/Community/Sponsored-card";
 import MarketplaceSection from "../components/MarketplaceSection";
+import SearchAndBook from "./components/SearchAndBook";
 
 export default function HomePage() {
   return (
@@ -16,6 +17,7 @@ export default function HomePage() {
     >
       <Header />
       <HeroSection />
+      <SearchAndBook />
       <CommunitySection />
       <SponsorsSection />
       <MarketplaceSection />

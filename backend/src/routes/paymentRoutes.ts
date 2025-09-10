@@ -6,7 +6,8 @@ import { authMiddleware, roleMiddleware } from '../middleware/authMiddleware';
 const router = Router();
 
 router.use(authMiddleware);
-router.post('/', roleMiddleware(['customer']), createPayment);
+// Manual payment confirmation endpoint per spec
+router.post('/manual', roleMiddleware(['customer', 'admin']), createPayment);
 router.get('/', roleMiddleware(['admin', 'vendor']), getPayments);
 router.get('/:id', getPaymentById);
 router.patch('/:id/status', roleMiddleware(['admin']), updatePaymentStatus);

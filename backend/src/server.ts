@@ -15,6 +15,7 @@ import orderRoutes from './routes/orderRoutes';
 import postRoutes from './routes/postRoutes';
 import reviewRoutes from './routes/reviewRoutes';
 import supportRoutes from './routes/supportRoutes';
+import analyticsRoutes from './routes/analyticsRoutes';
 
 dotenv.config();
 connectDB();
@@ -37,6 +38,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/support', supportRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Default route
 app.get('/', (req, res) => {

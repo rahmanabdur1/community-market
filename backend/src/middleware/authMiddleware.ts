@@ -30,3 +30,15 @@ export const isCustomer = (req: any, res: Response, next: NextFunction) => {
   if (req.user.role !== 'customer') return res.status(403).json({ message: 'Customer only access' });
   next();
 };
+
+// Aliases to match route imports
+export const authMiddleware = verifyToken;
+
+export const roleMiddleware = (allowedRoles: Array<'admin' | 'vendor' | 'customer'>) => {
+  return (req: any, res: Response, next: NextFunction) => {
+    if (!req.user || !allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+    next();
+  };
+};

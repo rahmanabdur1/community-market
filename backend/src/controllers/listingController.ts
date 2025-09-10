@@ -8,7 +8,11 @@ export const createListing = async (req: any, res: Response) => {
 };
 
 export const getListings = async (req: Request, res: Response) => {
-  const listings = await Listing.find();
+  const { q, location } = req.query as { q?: string; location?: string };
+  const filter: any = {};
+  if (q) filter.title = { $regex: q, $options: 'i' };
+  if (location) filter.location = { $regex: location, $options: 'i' };
+  const listings = await Listing.find(filter);
   res.json(listings);
 };
 
@@ -36,4 +40,14 @@ export const deleteListing = async (req: Request, res: Response) => {
   const listing = await Listing.findByIdAndDelete(req.params.id);
   if (!listing) return res.status(404).json({ message: 'Listing not found' });
   res.json({ message: 'Listing deleted successfully' });
+};
+
+// Check availability by date (available if no confirmed or pending booking exists for that date)
+export const checkAvailability = async (req: Request, res: Response) => {
+  const { date } = req.query as { date?: string };
+  if (!date) return res.status(400).json({ message: 'date query param is required' });
+  const targetDate = new Date(date);
+  const Booking = (await import('../models/Booking')).default;
+  const existing = await Booking.findOne({ listingId: req.params.id, date: targetDate, status: { $in: ['pending', 'confirmed'] } });
+  res.json({ available: !existing });
 };
