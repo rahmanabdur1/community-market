@@ -1,0 +1,57 @@
+{
+  "items": [
+    {
+      "id": "tn-1",
+      "title": "Diontae Johnson",
+      "trailing": "Released by Cleveland Browns",
+      "league": "NFL",
+      "location": "New York, Giants",
+      "teamLogo": "/assets/teams/min.png",
+      "href": "/news/diontae-release",
+      "kind": "Fantasy",
+      "timeAgo": "1h ago"
+    },
+    {
+      "id": "tn-2",
+      "title": "Saquon Barkley",
+      "trailing": "injured badly",
+      "league": "NFL",
+      "location": "California, Giants",
+      "teamLogo": "/assets/teams/min-2.png",
+      "href": "/news/saquon-injury",
+      "kind": "Fantasy",
+      "timeAgo": "2h ago"
+    },
+    {
+      "id": "tn-3",
+      "title": "Haviar Cabrera",
+      "trailing": "in hospital",
+      "league": "NFL",
+      "location": "New York, Giants",
+      "teamLogo": "/assets/teams/min-3.png",
+      "href": "/news/haviar-hospital",
+      "kind": "Fantasy",
+      "timeAgo": "3h ago"
+    },
+    {
+      "id": "tn-4",
+      "title": "Blockbuster trade talks heat up for top WR",
+      "league": "NFL",
+      "location": "New York, Giants",
+      "teamLogo": "/assets/teams/min-4.png",
+      "href": "/news/wr-trade",
+      "kind": "Fantasy",
+      "timeAgo": "45m ago"
+    },
+    {
+      "id": "tn-5",
+      "title": "Draft Board Shake-Up After Preseason Finale",
+      "league": "NFL",
+      "location": "New York, Giants",
+      "teamLogo": "/assets/teams/min.png",
+      "href": "/news/draft-shakeup",
+      "kind": "Draft",
+      "timeAgo": "5h ago"
+    }
+  ]
+}

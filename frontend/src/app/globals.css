@@ -1,0 +1,329 @@
+/* ──────────────────────────────────────────────
+   Imports
+   ────────────────────────────────────────────── */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Enable `.dark` variant */
+@custom-variant dark (&:is(.dark *));
+
+/* Map Tailwind/shadcn tokens to CSS variables */
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: var(--font-chakra);
+  --font-mono: var(--font-geist-mono);
+
+  --color-brand-gray-soft: var(--brand-gray-soft);
+}
+
+/* ──────────────────────────────────────────────
+   LIGHT THEME (brand-first, minimal)
+   ────────────────────────────────────────────── */
+:root {
+ 
+
+
+  /* Core surfaces & text */
+  --background: #fbfcff;
+  --foreground: #102d39;
+
+  --card: #ffffff;
+  --card-foreground: #102d39;
+
+  --popover: #ffffff;
+  --popover-foreground: #102d39;
+
+  /* Brand & actions */
+  --primary: #edeb7a;
+  --primary-foreground: #102d39;
+
+  --secondary: #afc1ca;
+  --secondary-foreground: #102d39;
+
+  --accent: #e4eaed;
+  --accent-foreground: #102d39;
+
+  /* UI chrome */
+  --muted: #f7f9fc;
+  --muted-foreground: #617078;
+
+  --destructive: #e23636;
+  --border: #cad5dc;
+  --input: #cad5dc;
+  --ring: #102d39;
+
+   --radius: 0.625rem;
+
+  /* Status */
+  --success: #00c853;
+  --success-foreground: #fbfcff;
+  --success-soft: #bff1d4;
+
+  --info: #3188aa;
+  --info-foreground: #fbfcff;
+  --info-soft: #d0edf8;
+
+  --warning: #edeb7a;
+  --warning-foreground: #102d39;
+
+  --danger: #e23636;
+  --danger-soft: #f8cdcd;
+
+  /* Named swatches (optional reference) */
+  --brand-deep: #102d39;
+  --brand-foam: #fbfcff;
+  --brand-mist: #afc1ca;
+  --brand-gold: #edeb7a;
+  --brand-cloud: #e4eaed;
+  --brand-slate: #70818b;
+  --brand-stone: #617078;
+  --brand-mint: #bff1d4;
+  --brand-rose: #f8cdcd;
+  --brand-sky: #3188aa;
+  --brand-sky-soft: #d0edf8;
+  --brand-gray: #bfbfbf;
+  --brand-gray-soft: #cad5dc;
+  --brand-teal-deep: #28424d;
+  --brand-ui-soft: #f7f9fc;
+  --brand-ui-alt: #d0edf8;
+
+
+  color-scheme: light;
+}
+
+/* ──────────────────────────────────────────────
+   DARK THEME (palette-compliant, high contrast)
+   ────────────────────────────────────────────── */
+.dark {
+  --background: #102d39;
+  --foreground: #fbfcff;
+
+
+  --card: #28424d;
+  --card-foreground: #fbfcff;
+
+  --popover: #28424d;
+  --popover-foreground: #fbfcff;
+
+  --primary: #edeb7a;
+  --primary-foreground: #102d39;
+
+  --secondary: #617078;
+  --secondary-foreground: #fbfcff;
+
+  --accent: #28424d;
+  --accent-foreground: #fbfcff;
+
+  --muted: #28424d;
+  --muted-foreground: #afc1ca;
+
+  --destructive: #e23636;
+  --border: #70818b;
+  --input: #70818b;
+  --ring: #edeb7a;
+
+  --success: #00c853;
+  --success-foreground: #fbfcff;
+  --success-soft: #28424d;
+
+  --info: #3188aa;
+  --info-foreground: #fbfcff;
+  --info-soft: #233a45;
+
+  --warning: #edeb7a;
+  --warning-foreground: #102d39;
+
+  --danger: #e23636;
+  --danger-soft: #3e1c1c;
+
+  color-scheme: dark;
+}
+
+/* ──────────────────────────────────────────────
+   Base layer: minimal, accessible
+   ────────────────────────────────────────────── */
+@layer base {
+  *,
+  ::before,
+  ::after {
+    @apply border-border;
+  }
+
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-chakra), ui-sans-serif, system-ui, -apple-system,
+      "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+      "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 40%, transparent);
+    color: var(--foreground);
+  }
+
+  img,
+  svg,
+  video,
+  canvas,
+  audio,
+  iframe,
+  embed,
+  object {
+    display: block;
+    max-width: 100%;
+  }
+  img {
+    height: auto;
+  }
+
+  /* Typography families */
+  p,
+  .prose p {
+    font-family: var(--font-inter), var(--font-chakra), ui-sans-serif;
+  }
+  h4,
+  h5,
+  h6,
+  .subtitle {
+    font-family: var(--font-creato), var(--font-chakra), ui-sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ──────────────────────────────────────────────
+   Utilities
+   ────────────────────────────────────────────── */
+@layer utilities {
+  .font-display {
+    font-family: var(--font-chakra), ui-sans-serif;
+  }
+  .font-body {
+    font-family: var(--font-inter), ui-sans-serif;
+  }
+  .font-subtitle {
+    font-family: var(--font-creato), ui-sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  /* Fixed responsive container (centered, consistent gutters) */
+  .container {
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1rem; /* 16px default gutter */
+  }
+
+  @media (min-width: 640px) {
+    .container {
+      max-width: 640px;
+    }
+  } /* sm */
+  @media (min-width: 768px) {
+    .container {
+      max-width: 768px;
+      padding-inline: 1.25rem;
+    }
+  } /* md */
+  @media (min-width: 1024px) {
+    .container {
+      max-width: 1024px;
+      padding-inline: 1.5rem;
+    }
+  } /* lg */
+  @media (min-width: 1280px) {
+    .container {
+      max-width: 1280px;
+      padding-inline: 1.5rem;
+    }
+  } /* xl */
+  @media (min-width: 1536px) {
+    .container {
+      max-width: 1280px;
+      padding-inline: 0;
+    }
+  } /* 2xl clamp */
+
+  /* A max container that matches your common layout width */
+  .container-7xl {
+    max-width: 80rem;
+  } /* 1280px */
+  .ptb {
+    @apply py-25;
+  }
+  .pto {
+    @apply pt-25;
+  }
+  .pbo {
+    @apply pb-25;
+  }
+}
+
+/* ──────────────────────────────────────────────
+   App-level helpers
+   ────────────────────────────────────────────── */
+/* Logical spacing for sections */
+.section {
+  padding-block: clamp(3rem, 4vw, 5rem);
+}
+
+/* Shadow tokens (opt-in) */
+.shadow-soft {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+.shadow-strong {
+  box-shadow: 0 12px 44px rgba(0, 0, 0, 0.12);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

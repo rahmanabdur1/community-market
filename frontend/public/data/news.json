@@ -1,0 +1,61 @@
+{
+  "hero": {
+    "id": "n-hero",
+    "title": "Consensus Fantasy Football Sleepers from 50+ Experts",
+    "excerpt": "We aggregated boards from industry analysts to surface mid-round values who can win your draft.",
+    "category": "Trending",
+    "image": "/assets/news/hero.jpg",
+    "publishedAt": "2025-08-30T10:12:00.000Z",
+    "author": {
+      "id": "a1",
+      "name": "Mike Johnson",
+      "avatar": "/assets/user.png"
+    },
+    "href": "/news/consensus-sleepers",
+    "mediaType": "article",
+    "isTrending": true
+  },
+  "rail": [
+    {
+      "id": "n1",
+      "title": "Late-Round WR Targets with League-Winning Upside",
+      "category": "Analysis",
+      "image": "/assets/news/card-1.jpg",
+      "publishedAt": "2025-08-30T11:05:00.000Z",
+      "author": {
+        "id": "a2",
+        "name": "Sara Wolfe",
+        "avatar": "/assets/user.png"
+      },
+      "href": "/news/late-round-wr-upside",
+      "mediaType": "article",
+      "isTrending": true
+    },
+    {
+      "id": "n2",
+      "title": "Preseason Week 3: Snap Counts You Need to Know",
+      "category": "Breaking",
+      "image": "/assets/news/card-2.jpg",
+      "publishedAt": "2025-08-30T09:35:00.000Z",
+      "author": { "id": "a3", "name": "Evan Martins" },
+      "href": "/news/preseason-snap-counts",
+      "mediaType": "article",
+      "isTrending": true
+    },
+    {
+      "id": "n3",
+      "title": "Injury Report: Monitoring Star RB’s Hamstring",
+      "category": "Injury",
+      "image": "/assets/news/card-3.jpg",
+      "publishedAt": "2025-08-30T08:55:00.000Z",
+      "author": {
+        "id": "a4",
+        "name": "Lena Park",
+        "avatar": "/assets/user.png"
+      },
+      "href": "/news/injury-monitor-rb",
+      "mediaType": "article",
+      "isTrending": false
+    }
+  ]
+}

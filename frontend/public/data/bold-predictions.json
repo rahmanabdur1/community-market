@@ -1,0 +1,39 @@
+{
+  "items": [
+    {
+      "id": "bp-1",
+      "title": "Travis Kelce Signs Contract Extension, Becomes…",
+      "category": "Breaking",
+      "image": "/assets/news/bold-1.jpg",
+      "publishedAt": "2025-08-30T11:00:00.000Z",
+      "author": {
+        "id": "a1",
+        "name": "Mike Johnson",
+        "avatar": "/assets/user.png"
+      },
+      "href": "/news/bold/kelce-extension"
+    },
+    {
+      "id": "bp-2",
+      "title": "Waiver Wire: Week 3 Stashes with League-Winning Upside",
+      "category": "Waiver Wire",
+      "image": "/assets/news/bold-2.jpg",
+      "publishedAt": "2025-08-30T10:30:00.000Z",
+      "author": {
+        "id": "a2",
+        "name": "Sara Wolfe",
+        "avatar": "/assets/user.png"
+      },
+      "href": "/news/bold/user-wire-week3"
+    },
+    {
+      "id": "bp-3",
+      "title": "Analysis: Why Tua’s Efficiency Points to a Historic Stretch",
+      "category": "Analysis",
+      "image": "/assets/news/bold-3.jpg",
+      "publishedAt": "2025-08-30T09:45:00.000Z",
+      "author": { "id": "a3", "name": "Evan Martins" },
+      "href": "/news/bold/tua-historic"
+    }
+  ]
+}

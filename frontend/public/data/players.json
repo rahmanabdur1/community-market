@@ -1,0 +1,130 @@
+{
+  "players": [
+    {
+      "id": "p1",
+      "rank": 1,
+      "name": "Saquon Barkley",
+      "position": "RB",
+      "team": "KC",
+      "bye": 2,
+      "isLocked": true
+    },
+    {
+      "id": "p2",
+      "rank": 2,
+      "name": "Saquon Barkley",
+      "position": "RB",
+      "team": "KC",
+      "bye": 2,
+      "isLocked": true
+    },
+    {
+      "id": "p3",
+      "rank": 3,
+      "name": "Saquon Barkley",
+      "position": "RB",
+      "team": "KC",
+      "bye": 2,
+      "isLocked": true
+    },
+    {
+      "id": "p4",
+      "rank": 4,
+      "name": "Saquon Barkley",
+      "position": "RB",
+      "team": "KC",
+      "bye": 2,
+      "isLocked": true
+    },
+    {
+      "id": "p5",
+      "rank": 5,
+      "name": "Saquon Barkley",
+      "position": "RB",
+      "team": "KC",
+      "bye": 2,
+      "isLocked": true
+    }
+  ],
+  "trendingUp": [
+    {
+      "id": "t1",
+      "name": "Jayden Reed",
+      "team": "GB",
+      "position": "WR",
+      "deltaPct": 32
+    },
+    {
+      "id": "t2",
+      "name": "Jayden Reed",
+      "team": "GB",
+      "position": "WR",
+      "deltaPct": 32
+    },
+    {
+      "id": "t3",
+      "name": "Jayden Reed",
+      "team": "GB",
+      "position": "WR",
+      "deltaPct": 32
+    },
+    {
+      "id": "t4",
+      "name": "Jayden Reed",
+      "team": "GB",
+      "position": "WR",
+      "deltaPct": 32
+    },
+    {
+      "id": "t5",
+      "name": "Jayden Reed",
+      "team": "GB",
+      "position": "WR",
+      "deltaPct": 32
+    },
+    {
+      "id": "t6",
+      "name": "Jayden Reed",
+      "team": "GB",
+      "position": "WR",
+      "deltaPct": 32
+    }
+  ],
+  "trendingDown": [
+    {
+      "id": "d1",
+      "name": "Player Down A",
+      "team": "NYJ",
+      "position": "RB",
+      "deltaPct": -18
+    },
+    {
+      "id": "d2",
+      "name": "Player Down B",
+      "team": "DAL",
+      "position": "WR",
+      "deltaPct": -14
+    },
+    {
+      "id": "d3",
+      "name": "Player Down C",
+      "team": "BUF",
+      "position": "TE",
+      "deltaPct": -9
+    },
+    {
+      "id": "d4",
+      "name": "Player Down D",
+      "team": "CHI",
+      "position": "WR",
+      "deltaPct": -7
+    },
+    {
+      "id": "d5",
+      "name": "Player Down E",
+      "team": "MIA",
+      "position": "RB",
+      "deltaPct": -5
+    }
+  ]
+}

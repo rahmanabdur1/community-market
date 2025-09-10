@@ -1,0 +1,11 @@
+{
+  "id": "week6-qb",
+  "question": "Which QB would you start in Week 6?",
+  "totalVotes": 2347,
+  "options": [
+    { "id": "goff", "label": "Jared Goff vs BAL", "percent": 42 },
+    { "id": "tua", "label": "Tua Tagovailoa @ BUF", "percent": 32 },
+    { "id": "dak", "label": "Dak Prescott vs DET", "percent": 58 },
+    { "id": "purdy", "label": "Brock Purdy vs ARI", "percent": 20 }
+  ]
+}
