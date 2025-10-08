@@ -45,3 +45,26 @@ export const protect = (req: Request, res: Response, next: NextFunction) => {
     res.status(401).json({ message: "Not authorized, invalid token" });
   }
 };
+
+// Backwards-compatible alias names for routes expecting older exports
+export const verifyToken = protect;
+
+export const roleMiddleware = (allowedRoles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const userRole = (req as any).userRole || 'user';
+    if (!allowedRoles.includes(userRole)) {
+      return res.status(403).json({ message: 'Forbidden' });
+    }
+    next();
+  };
+};
+
+export const authMiddleware = protect;
+
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
+  const userRole = (req as any).userRole || 'user';
+  if (userRole !== 'admin') {
+    return res.status(403).json({ message: 'Admin only' });
+  }
+  next();
+};

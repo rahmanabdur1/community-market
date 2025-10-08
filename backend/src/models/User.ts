@@ -8,6 +8,9 @@ export interface IUser extends Document {
   password: string;
   roles: ("admin" | "vendor" | "customer" | "user")[];
   emailVerified: boolean;
+  emailVerificationToken?: string | null;
+  passwordResetToken?: string | null;
+  passwordResetExpires?: Date | null;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidate: string): Promise<boolean>;
@@ -24,7 +27,10 @@ const userSchema = new Schema<IUser>(
       enum: ["admin", "vendor", "customer", "user"],
       default: ["user"],
     },
-    emailVerified: { type: Boolean, default: true },
+    emailVerified: { type: Boolean, default: false },
+    emailVerificationToken: { type: String },
+    passwordResetToken: { type: String },
+    passwordResetExpires: { type: Date },
   },
   { timestamps: true }
 );
