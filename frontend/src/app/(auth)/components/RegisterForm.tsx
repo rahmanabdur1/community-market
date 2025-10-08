@@ -1,5 +1,5 @@
 "use client";
-
+import { AxiosError } from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,17 +21,28 @@ export default function RegisterForm() {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
+    reset,
   } = useForm<RegisterInput>({
     resolver: zodResolver(RegisterSchema),
   });
-
-
-  const mutation = useMutation({
-    mutationFn: async (data: RegisterInput) => {
-      return await registerUser(data);
+ console.log(errors)
+  const mutation = useMutation<
+    RegisterInput,
+    AxiosError<{ message?: string }>,
+    RegisterInput
+  >({
+    mutationFn: (data) => registerUser(data),
+    onSuccess: () => reset(),
+    onError: (error) => {
+      if (error.response?.data?.message === "Email already exists") {
+        setError("email", {
+          type: "manual",
+          message: "Email already exists, try another email!",
+        });
+      }
     },
   });
-
   const onSubmit = (data: RegisterInput) => {
     mutation.mutate(data);
   };
@@ -39,13 +50,13 @@ export default function RegisterForm() {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className={cn("flex flex-col gap-4 md:gap-5  ")}
+      className={cn("flex flex-col gap-4 md:gap-5")}
     >
       {/* Username */}
       <div className="flex flex-col gap-2">
         <label
           htmlFor="displayName"
-          className="text-[color:var(--secondary-foreground)] font-medium text-[16px] md:text-[17px] leading-[20px] md:leading-[22px]"
+          className="text-[color:var(--secondary-foreground)]  font-medium text-[16px] md:text-[17px] leading-[20px] md:leading-[22px]"
         >
           Username
         </label>
@@ -87,7 +98,7 @@ export default function RegisterForm() {
             placeholder="Email"
             {...register("email")}
             className={cn(
-              "h-11 w-full rounded-[4px] border border-[color:var(--secondary)] pl-10 pr-3 py-2 text-[color:var(--muted-foreground)] placeholder:text-[color:var(--muted-foreground)] font-[500] text-[16px] leading-[19px]"
+              "h-11 w-full rounded-[4px] border border-[color:var(--secondary)] pl-10 pr-3 py-2 text-[color:var(--muted-foreground)] placeholder:text-[color:var(--muted-foreground)] font-font-inter font-[500] text-[16px] leading-[19px]"
             )}
           />
         </div>
@@ -104,7 +115,7 @@ export default function RegisterForm() {
           htmlFor="password"
           className="text-[color:var(--secondary-foreground)] font-medium text-[16px] leading-[19px]"
         >
-          Password
+          Create Password
         </label>
         <div className="relative flex items-center">
           <Image
@@ -117,10 +128,10 @@ export default function RegisterForm() {
           <Input
             id="password"
             type={showPassword ? "text" : "password"}
-            placeholder="Password"
+            placeholder="Create Password"
             {...register("password")}
             className={cn(
-              "h-11 w-full rounded-[4px] border border-[color:var(--secondary)] pl-10 pr-10 py-2 text-[color:var(--muted-foreground)] placeholder:text-[color:var(--muted-foreground)] font-[500] text-[16px] leading-[19px]"
+              "h-11 w-full rounded-[4px] border  border-[color:var(--secondary)] pl-10 pr-10 py-2 text-[color:var(--muted-foreground)] placeholder:text-[color:var(--muted-foreground)] font-[500] text-[16px] leading-[19px]"
             )}
           />
           <button
@@ -162,7 +173,7 @@ export default function RegisterForm() {
           <Input
             id="passwordConfirm"
             type={showConfirmPassword ? "text" : "password"}
-            placeholder="Confirm Password"
+            placeholder="Re-Enter Password"
             {...register("passwordConfirm")}
             className={cn(
               "h-11 w-full rounded-[4px] border border-[color:var(--secondary)] pl-10 pr-10 py-2 text-[color:var(--muted-foreground)] placeholder:text-[color:var(--muted-foreground)] font-[500] text-[16px] leading-[19px]"
@@ -204,7 +215,7 @@ export default function RegisterForm() {
 
       {/* Already have account */}
       <div className="flex items-center gap-2 flex-wrap">
-        <span className="font-secondary font-normal text-[16px] leading-[20px] text-[color:var(--text-default-1)]">
+        <span className="font-secondary font-normal text-[16px] leading-[20px] text-[var(--muted-foreground)]">
           Already have an account?
         </span>
         <Link
@@ -219,7 +230,7 @@ export default function RegisterForm() {
       <Button
         type="submit"
         disabled={mutation.isPending}
-        className="h-11 rounded-[8px] bg-primary px-6 py-3 flex items-center justify-center text-center font-medium text-[18px] leading-[24px] text-foreground hover:bg-primary/90 transition-colors duration-200"
+        className="h-11 rounded-[8px] mt-1 bg-foreground px-6 py-3 flex items-center justify-center text-center font-medium text-[18px] leading-[24px] text-background hover:bg-foreground/90 transition-colors duration-200"
       >
         {mutation.isPending ? "Registering..." : "Register"}
       </Button>

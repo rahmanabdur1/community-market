@@ -7,19 +7,19 @@ export interface Player {
   rank: number;
   name: string;
   position: Position;
-  team: string; // e.g. "KC"
+  team: string; 
   bye: number;
-  projPts?: number; // absent when locked
-  isLocked?: boolean; // if projections are paywalled/locked
-  headshot?: string; // optional image path
+  projPts?: number; 
+  isLocked?: boolean; 
+  headshot?: string; 
 }
 
 export interface TrendItem {
   id: string;
   name: string;
-  team: string; // e.g. "GB"
+  team: string; 
   position: Position;
-  deltaPct: number; // positive for up, negative for down
+  deltaPct: number; 
   headshot?: string;
 }
 

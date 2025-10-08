@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { createListing, getListings, getListingById, updateListing, approveListing, deleteListing, checkAvailability } from '../controllers/listingController';
-import { authMiddleware, roleMiddleware } from '../middleware/authMiddleware';
+import {  roleMiddleware } from '../middleware/authMiddleware';
 
 const router = Router();
 
@@ -9,8 +9,7 @@ router.get('/', getListings);
 router.get('/:id', getListingById);
 router.get('/:id/availability', checkAvailability);
 
-// Authenticated write routes
-router.use(authMiddleware);
+
 router.post('/', roleMiddleware(['vendor']), createListing);
 router.put('/:id', roleMiddleware(['vendor', 'admin']), updateListing);
 router.patch('/:id/approve', roleMiddleware(['admin']), approveListing);

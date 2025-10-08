@@ -1,13 +1,11 @@
-import mongoose from 'mongoose';
-
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/community_booking';
+import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(MONGO_URI);
-    console.log('MongoDB connected successfully');
-  } catch (error) {
-    console.error('MongoDB connection failed:', error);
+    const conn = await mongoose.connect(process.env.MONGODB_URI || "");
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (err) {
+    console.error("MongoDB connection failed:", err);
     process.exit(1);
   }
 };

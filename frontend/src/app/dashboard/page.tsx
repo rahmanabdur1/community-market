@@ -1,34 +1,63 @@
-"use client";
+ "use client";
 
-import AuthGuard from "@/components/auth/AuthGuard";
-import { useSessionStore } from "@/store/useSessionStore";
+ import { useEffect, useState } from "react";
+ import { useSessionStore } from "@/store/useSessionStore";
+ import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+ import { getUsers } from "@/services/auth.service";
 
-export default function DashboardPage() {
+export default function Dashboard() {
   const { user, logout } = useSessionStore();
+  const router = useRouter();
+  const [users, setUsers] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+ useEffect(() => {
+   const fetchUsers = async () => {
+     try {
+       const data = await getUsers(); // ✅ now authenticated
+       setUsers(data);
+     } catch (err: any) {
+       setError(err.message || "Failed to fetch users");
+     } finally {
+       setLoading(false);
+     }
+   };
+   fetchUsers();
+ }, []);
+
+
+  const handleLogout = async () => {
+    await logout();
+    router.replace("/login");
+  };
 
   return (
-    <AuthGuard>
-      <div className="p-6 space-y-4">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p>Welcome, {user?.name}</p>
-        <div className="flex gap-3">
-          {user?.role === "admin" && (
-            <a href="/dashboard/admin" className="px-4 py-2 bg-blue-600 text-white rounded">Admin Panel</a>
-          )}
-          {user?.role === "vendor" && (
-            <a href="/dashboard/vendor" className="px-4 py-2 bg-green-600 text-white rounded">Vendor Panel</a>
-          )}
-          {user?.role === "customer" && (
-            <a href="/dashboard/customer" className="px-4 py-2 bg-indigo-600 text-white rounded">My Account</a>
-          )}
-          <button
-            onClick={logout}
-            className="px-4 py-2 cursor-pointer bg-red-500 text-white rounded"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
-    </AuthGuard>
+    <div className="p-6">
+      <h1 className="text-xl font-bold mb-4">Welcome, {user?.displayName}</h1>
+      <Button onClick={handleLogout} variant="destructive" className="mb-6">
+        Logout
+      </Button>
+
+      <h2 className="text-lg font-semibold mb-2">User List</h2>
+      {loading && <p>Loading users...</p>}
+      {error && <p className="text-red-500">{error}</p>}
+      {!loading && !error && (
+        <ul className="space-y-2">
+          {users.map((u) => (
+            <li key={u._id} className="border p-2 rounded">
+              <p>
+                <strong>Name:</strong> {u.displayName}
+              </p>
+              <p>
+                <strong>Email:</strong> {u.email}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
+

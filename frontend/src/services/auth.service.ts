@@ -1,8 +1,9 @@
-
-
+import Cookies from "js-cookie";
+import { useSessionStore } from "@/store/useSessionStore";
 import { AxiosError } from "axios";
 import { api } from "./api";
 import { LoginInput, RegisterInput, ResetPasswordInput } from "@/types/auth.type";
+import { authApi } from "@/services/api";
 
 export const registerUser = async (userData: RegisterInput) => {
   try {
@@ -46,10 +47,6 @@ export const resetPassword = async (email: string) => {
 };
 
 
-
-
-
-
 export const resetPasswordWithToken = async (data: ResetPasswordInput) => {
   const payload = {
     recoveryAccessToken: data.token,
@@ -60,3 +57,26 @@ export const resetPasswordWithToken = async (data: ResetPasswordInput) => {
   return response.data;
 };
 
+
+export const logoutUser = async () => {
+  try {
+
+    await api.post("auth/logout");
+
+    const { clearSession } = useSessionStore.getState();
+    clearSession();
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
+    return true;
+  } catch (error) {
+    throw error;
+  }
+}
+
+
+
+
+export const getUsers = async () => {
+  const response = await authApi.get("/users"); // ✅ sends token automatically
+  return response.data;
+};

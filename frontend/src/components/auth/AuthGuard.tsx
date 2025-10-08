@@ -1,28 +1,25 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { ReactNode, useEffect } from "react";
 import { useSessionStore } from "@/store/useSessionStore";
+import { useRouter } from "next/navigation";
 
-export default function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { user } = useSessionStore();
+interface AuthGuardProps {
+  children: ReactNode;
+}
+
+export default function AuthGuard({ children }: AuthGuardProps) {
+  const { session, user, isLoading } = useSessionStore();
   const router = useRouter();
-  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      router.replace("/login"); 
-    } else {
-      setChecking(false);
+    if (!isLoading && !session?.accessToken) {
+      router.replace("/login");
     }
-  }, [user, router]);
+  }, [session, isLoading, router]);
 
-  if (checking) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Checking authentication...
-      </div>
-    );
+  if (isLoading || !user) {
+    return <div className="p-6">Checking authentication...</div>;
   }
 
   return <>{children}</>;

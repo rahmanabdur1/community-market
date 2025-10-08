@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -13,16 +14,19 @@ import { resetPassword } from "@/services/auth.service";
 import { handleApiError } from "@/services/api";
 
 export default function ForgotPasswordPage() {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<ForgotPasswordInput>({
     resolver: zodResolver(ForgotPasswordSchema),
   });
 
   const mutation = useMutation({
     mutationFn: (email: string) => resetPassword(email),
+    onSuccess: () => reset(),
   });
 
   const onSubmit = (data: ForgotPasswordInput) => {
@@ -32,58 +36,88 @@ export default function ForgotPasswordPage() {
   return (
     <section
       className={cn(
-        "flex flex-col lg:flex-row font-font-chakra items-stretch justify-between bg-muted p-4 md:p-6 rounded-2xl gap-5 min-h-screen"
+        "flex flex-col lg:flex-row items-stretch justify-between rounded-2xl"
       )}
     >
-      <div className={cn("flex justify-center w-full lg:w-1/2 h-[850px]")}>
+      <div
+        className="relative  lg:w-1/2 
+                        h-[218px] sm:h-[300px] md:h-[400px] lg:h-[718px] 
+                        rounded-0  sm:rounded-2xl
+                        overflow-hidden 
+                        m-0 sm:m-3  
+        
+                        border-b border-secondary lg:border-b-0"
+      >
         <Image
           src="/assets/login.jpg"
-          alt="Forgot Password illustration"
-          width={674}
-          height={484}
-          priority
-          className={cn("w-full object-cover opacity-100 rotate-0 rounded-2xl")}
+          alt="Login illustration"
+          fill
+          className="object-cover"
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#102D39]" />
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={() => router.push("/")}
+          className="absolute top-8 left-8 w-9 h-9 rounded-full bg-[#FBFCFF] hover:bg-gray-100 shadow-md"
+        >
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M12.4988 12.5L1.5 1.5M1.50117 12.5L12.5 1.5"
+              stroke="#102D39"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </Button>
+
+        <div className="absolute bottom-6 lg:bottom-12 left-5 lg:left-8 right-6 lg:right-8 text-white">
+          <h1 className="font-font-chakra font-bold text-[24px] lg:text-[52px] leading-[28px] lg:leading-[72px] mb-2 lg:mb-4">
+            Your Gateway to the Fantasy Sports World
+          </h1>
+          <p className="text-[14px] lg:text-[16px] leading-[17px] lg:leading-[24px] text-[var(--brand-gray-soft)]">
+            Join the ultimate hub for fantasy sports fans. Log in to track
+            trades, catch the latest rumors, and stay ahead with expert insights
+            — all in one place.
+          </p>
+        </div>
       </div>
 
+      {/* Leftside form */}
       <div
-        className={cn(
-          "flex flex-col rounded-2xl h-auto md:h-[600px] lg:h-[850px] overflow-y-auto justify-between bg-brand-gray-soft border border-brand-mist w-full lg:w-1/2"
-        )}
+        className="flex flex-col justify-between bg-muted border border-secondary 
+                     m-3                 
+        lg:w-1/2 rounded-2xl p-4 md:p-8"
       >
-        <div className={cn("p-6 md:p-12 flex flex-col h-full")}>
-          <div className={cn("mb-6 md:mb-8")}>
-            <h1
-              className={cn(
-                "text-brand-deep font-bold text-[32px] md:text-[50px] leading-[40px] md:leading-[63px] tracking-[0]"
-              )}
-            >
-              Forgot Password
-            </h1>
-            <p
-              className={cn(
-                "mt-2 md:mt-3 text-muted-foreground font-medium text-[14px] md:text-[15px] leading-[20px] md:leading-[22px] tracking-[0]"
-              )}
-            >
+        <div className=" flex flex-col">
+          <div className="mb-2 md:mb-3">
+            <h2 className="text-brand-deep font-font-chakra font-bold text-[20px] md:text-[32px] tracking-normal">
+              Forgot Password!
+            </h2>
+            <p className="mt-2 md:mt-3 text-muted-foreground font-medium text-[14px] md:text-[15px] leading-[20px] md:leading-[22px] tracking-normal">
               Enter your email to receive a password reset link.
             </p>
           </div>
 
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className={cn("flex flex-col gap-4 md:gap-5")}
+            className="flex flex-col gap-4 md:gap-5"
           >
-            {/* Email Field */}
-            <div className={cn("flex flex-col gap-2")}>
+            <div className="flex flex-col gap-2">
               <label
                 htmlFor="email"
-                className={cn(
-                  "text-[color:var(--secondary-foreground)] font-medium text-[16px] md:text-[17px] leading-[20px] md:leading-[22px]"
-                )}
+                className="text-[color:var(--secondary-foreground)] font-medium text-[16px] md:text-[17px] leading-[20px] md:leading-[22px]"
               >
                 Email
               </label>
-              <div className={cn("relative flex items-center")}>
+              <div className="relative flex items-center">
                 <Image
                   src="/assets/email.png"
                   alt="Email Icon"
@@ -96,9 +130,7 @@ export default function ForgotPasswordPage() {
                   type="email"
                   placeholder="Enter your email"
                   {...register("email")}
-                  className={cn(
-                    "h-11 w-full rounded-[4px] border border-[color:var(--secondary)] pl-10 pr-3 py-2 text-[color:var(--muted-foreground)] placeholder:text-[color:var(--muted-foreground)] font-[500] text-[16px] leading-[19px]"
-                  )}
+                  className="h-11 w-full rounded-[4px] border border-[color:var(--secondary)] pl-10 pr-3 py-2 text-[color:var(--muted-foreground)] placeholder:text-[color:var(--muted-foreground)] text-[16px] leading-[19px]"
                 />
               </div>
               {errors.email && (
@@ -106,7 +138,6 @@ export default function ForgotPasswordPage() {
               )}
             </div>
 
-            {/* Error/Success */}
             {mutation.isError && (
               <p className="text-[var(--destructive)] text-sm">
                 {handleApiError(mutation.error).message ||
@@ -115,29 +146,26 @@ export default function ForgotPasswordPage() {
             )}
             {mutation.isSuccess && (
               <p className="text-[var(--success)] text-sm">
-                Password reset link sent. Check your inbox.
+                Password reset link sent. Check your mail inbox.
               </p>
             )}
 
-            {/* Submit Button */}
             <Button
               type="submit"
               disabled={mutation.isPending}
-              className={cn(
-                "h-11 rounded-[8px] bg-primary px-6 py-3 flex items-center justify-center text-center font-medium text-[18px] leading-[24px] text-foreground hover:bg-primary/90 transition-colors duration-200"
-              )}
+              className="h-11 rounded-[8px] mt-1 bg-foreground px-6 py-3 flex items-center justify-center text-center font-medium text-[18px] leading-[24px] text-background hover:bg-foreground/90 transition-colors duration-200"
             >
               {mutation.isPending ? "Sending..." : "Send Reset Link"}
             </Button>
           </form>
 
           <div className="flex items-center mt-3 gap-2 flex-wrap">
-            <span className="font-secondary font-normal text-[16px] leading-[20px] text-[color:var(--text-default-1)]">
-              Remembered your password?{" "}
+            <span className="text-[16px] leading-[20px] text-[color:var(--text-default-1)]">
+              Remembered your password?
             </span>
             <Link
               href="/login"
-              className="font-secondary font-bold text-[16px] leading-[20px] text-[color:var(--text-default-2)] hover:underline"
+              className="font-bold text-[16px] leading-[20px] text-[color:var(--text-default-2)] hover:underline"
             >
               Log in
             </Link>

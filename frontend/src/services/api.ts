@@ -1,33 +1,35 @@
-
-import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosError } from "axios";
+// services/api.ts
+import axios, { AxiosInstance, AxiosError } from "axios";
 import { useSessionStore } from "@/store/useSessionStore";
 import { NormalizedError } from "@/types/error.type";
 import { getValueByPath } from "@/lib/utils";
 
-const baseURL = process.env.NEXT_PUBLIC_BASE_API || "";
+// Base API config
+const baseURL = "http://localhost:4000/api";
 const API_KEY = process.env.NEXT_PUBLIC_API_KEY || "";
 
-// Public API
+// Public API instance (no auth required)
 export const api: AxiosInstance = axios.create({
   baseURL,
   headers: { "X-API-KEY": API_KEY },
 });
 
-// Auth API (requires token)
+// Authenticated API instance
 export const authApi: AxiosInstance = axios.create({
   baseURL,
   headers: { "X-API-KEY": API_KEY },
 });
 
-if (typeof window !== "undefined") {
-  authApi.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-    const { session } = useSessionStore.getState();
-    if (session?.accessToken) {
-      config.headers.Authorization = `Bearer ${session.accessToken}`;
-    }
-    return config;
-  });
-}
+
+
+authApi.interceptors.request.use((config) => {
+  const { session } = useSessionStore.getState();
+  if (session?.accessToken) {
+    config.headers.Authorization = `Bearer ${session.accessToken}`;
+  }
+  return config;
+});
+
 
 // Error handler
 export const handleApiError = (error: unknown, special?: string): NormalizedError => {
@@ -47,3 +49,5 @@ export const handleApiError = (error: unknown, special?: string): NormalizedErro
 
   return { message: message.trim(), special: special ? getValueByPath(data, special) : "", status, isClientError: status >= 400 && status < 500 };
 };
+
+

@@ -1,44 +1,47 @@
-import { Request, Response, NextFunction } from 'express';
-import { verifyToken as verifyJWT } from '../utils/utils';
+import { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
 
-// Verify JWT token
-export const verifyToken = (req: any, res: Response, next: NextFunction) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ message: 'No token provided' });
+const JWT_SECRET = process.env.JWT_SECRET || "secret";
 
-  const token = authHeader.split(' ')[1];
-  const decoded: any = verifyJWT(token);
+// Define custom interface for JWT payload
+interface JwtPayload {
+  id: string;
+  iat?: number;
+  exp?: number;
+}
 
-  if (!decoded) return res.status(403).json({ message: 'Invalid or expired token' });
-
-  req.user = decoded;
-  next();
-};
-
-// Role-based middleware
-export const isAdmin = (req: any, res: Response, next: NextFunction) => {
-  if (req.user.role !== 'admin') return res.status(403).json({ message: 'Admin only access' });
-  next();
-};
-
-export const isVendor = (req: any, res: Response, next: NextFunction) => {
-  if (req.user.role !== 'vendor') return res.status(403).json({ message: 'Vendor only access' });
-  next();
-};
-
-export const isCustomer = (req: any, res: Response, next: NextFunction) => {
-  if (req.user.role !== 'customer') return res.status(403).json({ message: 'Customer only access' });
-  next();
-};
-
-// Aliases to match route imports
-export const authMiddleware = verifyToken;
-
-export const roleMiddleware = (allowedRoles: Array<'admin' | 'vendor' | 'customer'>) => {
-  return (req: any, res: Response, next: NextFunction) => {
-    if (!req.user || !allowedRoles.includes(req.user.role)) {
-      return res.status(403).json({ message: 'Access denied' });
+// Extend Express Request interface to include user
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        id: string;
+      };
     }
+  }
+}
+
+export const protect = (req: Request, res: Response, next: NextFunction) => {
+  let token: string | undefined;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  } else if (req.cookies?.accessToken) {
+    token = req.cookies.accessToken;
+  }
+
+  if (!token) {
+    return res.status(401).json({ message: "Not authorized, no token" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    req.user = { id: decoded.id };
     next();
-  };
+  } catch (err) {
+    res.status(401).json({ message: "Not authorized, invalid token" });
+  }
 };

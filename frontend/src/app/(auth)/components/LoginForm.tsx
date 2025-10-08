@@ -13,51 +13,66 @@ import { handleApiError } from "@/services/api";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Cookies from "js-cookie";
 import { useMutation } from "@tanstack/react-query";
+
 
 export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const [checked, setChecked] = useState(false);
   const { setSession } = useSessionStore();
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<LoginInput>({
-    resolver: zodResolver(LoginSchema),
-  });
+ const {
+   register,
+   handleSubmit,
+   formState: { errors },
+   reset,
+ } = useForm<LoginInput>({
+   resolver: zodResolver(LoginSchema),
+ });
 
-
-  const mutation = useMutation({
-    mutationFn: async (data: LoginInput) => {
+const mutation = useMutation({
+  mutationFn: async (data: LoginInput) => {
+    console.log("[LoginForm] Attempting login with:", data);
+    try {
       const response = await loginUser(data);
+      console.log("[LoginForm] Login response:", response);
 
       setSession(
         {
-          accessToken: response.access_token,
-          refreshToken: response.refresh_token,
+          accessToken: response.accessToken,
+          refreshToken: response.refreshToken,
+          expiresAt: Date.now() + response.expiresIn * 1000,
+          tokenType: response.tokenType,
         },
         {
           id: response.user.id,
           name: response.user.name,
+          displayName: response.user.displayName,
           email: response.user.email,
+          emailVerified: response.user.emailVerified,
+          roles: response.user.roles,
+          createdAt: response.user.createdAt,
+          updatedAt: response.user.updatedAt,
         }
       );
 
-      Cookies.set("accessToken", response.access_token, { expires: 1 });
-      Cookies.set("refreshToken", response.refresh_token, { expires: 7 });
 
-      router.push("/dashboard");
-
+      console.log("[LoginForm] Session set, redirecting to /dashboard");
+      router.replace("/dashboard");
       return response;
-    },
-  });
+    } catch (error) {
+      console.log("[LoginForm] Login error:", error);
+      throw error;
+    }
+  },
+  onSuccess: () => reset(),
+});
 
-  const onSubmit = (data: LoginInput) => {
-    mutation.mutate(data);
-  };
+const onSubmit = (data: LoginInput) => {
+  console.log("[LoginForm] Form submitted:", data);
+  mutation.mutate(data);
+};
 
   return (
     <form
@@ -157,7 +172,7 @@ export default function LoginForm() {
       <div className={cn("flex items-center gap-2 flex-wrap")}>
         <span
           className={cn(
-            "font-secondary font-normal text-[16px] leading-[20px] text-[color:var(--text-default-1)]"
+            "font-secondary font-normal text-[16px] leading-[20px] text-[var(--muted-foreground)]"
           )}
         >
           New at FantasyBuzz?
@@ -175,29 +190,34 @@ export default function LoginForm() {
       <div className={cn("flex items-center justify-between flex-wrap")}>
         <div className={cn("flex items-center gap-2 text-sm")}>
           <div
+            onClick={() => setChecked(!checked)}
             className={cn(
-              "w-[20px] h-[20px] border-[1.5px] border-[var(--ring)] rounded-full flex items-center justify-center opacity-100"
+              "w-[15.8333px] h-[15.8333px] border-[1.5px] border-[var(--ring)] rounded flex items-center justify-center cursor-pointer",
+              checked ? "bg-[var(--background)]" : "bg-transparent"
             )}
           >
-            <svg
-              width="12"
-              height="11"
-              viewBox="0 0 12 11"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M1.3335 7.04167C1.3335 7.04167 3.20016 8.10628 4.1335 9.66667C4.1335 9.66667 6.9335 3.54167 10.6668 1.5"
-                stroke="#102D39"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            {checked && (
+              <svg
+                width="10"
+                height="9"
+                viewBox="0 0 10 9"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1.66675 5.45833C1.66675 5.45833 3.00008 6.21877 3.66675 7.33333C3.66675 7.33333 5.66675 2.95833 8.33341 1.5"
+                  stroke="#102D39"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
           </div>
+
           <span
             className={cn(
-              "font-secondary font-normal text-[16px] leading-[20px] text-[color:var(--text-default-2)]"
+              "font-secondary font-normal text-[16px] leading-[20px] text-[var(--primary-foreground)]"
             )}
           >
             Remember Me
@@ -217,7 +237,7 @@ export default function LoginForm() {
         type="submit"
         disabled={mutation.isPending}
         className={cn(
-          "h-11 rounded-[8px] bg-primary px-6 py-3 flex items-center justify-center text-center font-medium text-[18px] leading-[24px] text-foreground hover:bg-primary/90 transition-colors duration-200"
+          "h-11 rounded-[8px] bg-foreground px-6 mt-1 py-3 flex items-center justify-center text-center font-medium text-[18px] leading-[24px] text-background hover:bg-foreground/90 transition-colors duration-200"
         )}
       >
         {mutation.isPending ? "Logging in..." : "Login"}

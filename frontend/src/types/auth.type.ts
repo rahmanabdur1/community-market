@@ -1,10 +1,12 @@
+
+
 import { z } from "zod";
 
-/** Shared primitives */
 export const EmailSchema = z
   .string()
   .trim()
   .toLowerCase()
+  .min(1, "Email is required")
   .email("Please enter a valid email address")
   .max(254, "Email is too long");
 
@@ -24,12 +26,11 @@ export const PasswordSchema = z
   .regex(/[0-9]/, "Add at least one number")
   .regex(/[^A-Za-z0-9]/, "Add at least one special character");
 
-
 export const LoginSchema = z.object({
   email: EmailSchema,
   password: PasswordSchema,
+  // rememberMe: z.boolean().default(false),
 });
-
 
 export const RegisterSchema = z
   .object({
@@ -37,17 +38,16 @@ export const RegisterSchema = z
     displayName: DisplayNameSchema,
     password: PasswordSchema,
     passwordConfirm: z.string().min(1, "Please confirm your password"),
+  
   })
   .refine((data) => data.password === data.passwordConfirm, {
     path: ["passwordConfirm"],
     message: "Passwords do not match",
   });
 
-
 export const ForgotPasswordSchema = z.object({
   email: EmailSchema,
 });
-
 
 export const ResetPasswordSchema = z
   .object({
@@ -60,8 +60,9 @@ export const ResetPasswordSchema = z
     message: "Passwords do not match",
   });
 
-
 export type LoginInput = z.infer<typeof LoginSchema>;
 export type RegisterInput = z.infer<typeof RegisterSchema>;
 export type ForgotPasswordInput = z.infer<typeof ForgotPasswordSchema>;
 export type ResetPasswordInput = z.infer<typeof ResetPasswordSchema>;
+
+

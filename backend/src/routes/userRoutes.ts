@@ -1,13 +1,13 @@
-import { Router } from 'express';
-import { getUsers, getUserById, updateUser, deleteUser } from '../controllers/userController';
-import { authMiddleware, roleMiddleware } from '../middleware/authMiddleware';
+import { Router } from "express";
+import { getUsers, getMe } from "../controllers/userController";
+import { protect } from "../middleware/authMiddleware";
 
 const router = Router();
 
-router.use(authMiddleware);
-router.get('/', roleMiddleware(['admin']), getUsers);
-router.get('/:id', roleMiddleware(['admin', 'vendor']), getUserById);
-router.put('/:id', roleMiddleware(['admin', 'vendor']), updateUser);
-router.delete('/:id', roleMiddleware(['admin']), deleteUser);
+// ✅ Get all users
+router.get("/", protect, getUsers);
+
+// ✅ Get current logged-in user
+router.get("/me", protect, getMe);
 
 export default router;

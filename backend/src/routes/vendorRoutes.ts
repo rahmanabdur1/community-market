@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { createVendor, getVendors, getVendorById, updateVendor, changeStatus } from '../controllers/vendorController';
-import { authMiddleware, roleMiddleware } from '../middleware/authMiddleware';
+import { roleMiddleware } from '../middleware/authMiddleware';
 
 const router = Router();
 
-router.use(authMiddleware);
+
 router.post('/', roleMiddleware(['admin']), createVendor);
 router.get('/', getVendors);
 router.get('/:id', getVendorById);
