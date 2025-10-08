@@ -68,3 +68,19 @@ export const logAnalytics = async (
     console.error('Analytics logging failed:', err);
   }
 };
+
+export class AppError extends Error {
+  statusCode: number;
+  isOperational: boolean;
+  constructor(message: string, statusCode = 500) {
+    super(message);
+    this.statusCode = statusCode;
+    this.isOperational = true;
+  }
+}
+
+export const asyncHandler = <T extends (...args: any[]) => Promise<any>>(fn: T) => {
+  return (req: any, res: any, next: any) => {
+    Promise.resolve(fn(req, res, next)).catch(next);
+  };
+};

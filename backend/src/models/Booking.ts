@@ -15,4 +15,7 @@ const bookingSchema = new Schema<IBooking>({
   status: { type: String, enum: ['pending', 'confirmed', 'cancelled'], default: 'pending' },
 }, { timestamps: true });
 
+bookingSchema.index({ listingId: 1, date: 1 }, { unique: false });
+bookingSchema.index({ userId: 1, createdAt: -1 });
+
 export default mongoose.model<IBooking>('Booking', bookingSchema);
