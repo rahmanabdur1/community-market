@@ -7,16 +7,16 @@ import connectDB from './config/db';
 // Import Routes
 import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
-// import vendorRoutes from './routes/vendorRoutes';
-// import listingRoutes from './routes/listingRoutes';
-// import marketplaceRoutes from './routes/marketplaceRoutes';
-// import bookingRoutes from './routes/bookingRoutes';
-// import paymentRoutes from './routes/paymentRoutes';
-// import orderRoutes from './routes/orderRoutes';
-// import postRoutes from './routes/postRoutes';
-// import reviewRoutes from './routes/reviewRoutes';
-// import supportRoutes from './routes/supportRoutes';
-// import analyticsRoutes from './routes/analyticsRoutes';
+import vendorRoutes from './routes/vendorRoutes';
+import listingRoutes from './routes/listingRoutes';
+import marketplaceRoutes from './routes/marketplaceRoutes';
+import bookingRoutes from './routes/bookingRoutes';
+import paymentRoutes from './routes/paymentRoutes';
+import orderRoutes from './routes/orderRoutes';
+import postRoutes from './routes/postRoutes';
+import reviewRoutes from './routes/reviewRoutes';
+import supportRoutes from './routes/supportRoutes';
+import analyticsRoutes from './routes/analyticsRoutes';
 
 dotenv.config();
 connectDB();
@@ -39,16 +39,16 @@ app.use(cookieParser());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
-// app.use('/api/vendors', vendorRoutes);
-// app.use('/api/listings', listingRoutes);
-// app.use('/api/marketplace', marketplaceRoutes);
-// app.use('/api/bookings', bookingRoutes);
-// app.use('/api/payments', paymentRoutes);
-// app.use('/api/orders', orderRoutes);
-// app.use('/api/posts', postRoutes);
-// app.use('/api/reviews', reviewRoutes);
-// app.use('/api/support', supportRoutes);
-// app.use('/api/analytics', analyticsRoutes);
+app.use('/api/vendors', vendorRoutes);
+app.use('/api/listings', listingRoutes);
+app.use('/api/marketplace', marketplaceRoutes);
+app.use('/api/bookings', bookingRoutes);
+app.use('/api/payments', paymentRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/support', supportRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Default route
 app.get('/', (req, res) => {

@@ -1,5 +1,5 @@
 // services/api.ts
-import axios, { AxiosInstance, AxiosError } from "axios";
+import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from "axios";
 import { useSessionStore } from "@/store/useSessionStore";
 import { NormalizedError } from "@/types/error.type";
 import { getValueByPath } from "@/lib/utils";
@@ -22,7 +22,7 @@ export const authApi: AxiosInstance = axios.create({
 
 
 
-authApi.interceptors.request.use((config) => {
+authApi.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const { session } = useSessionStore.getState();
   if (session?.accessToken) {
     config.headers.Authorization = `Bearer ${session.accessToken}`;
@@ -33,7 +33,7 @@ authApi.interceptors.request.use((config) => {
 
 // Error handler
 export const handleApiError = (error: unknown, special?: string): NormalizedError => {
-  const err = error as AxiosError<{ message?: string | string[]; errors?: Record<string, string[]> }>;
+  const err = error as AxiosError<{ message?: string | string[]; errors?: Record<string, string[]> | undefined } | undefined>;
 
   if (!err.response) {
     return { message: err.message || "Network request failed", status: 0, isClientError: true };
@@ -44,7 +44,10 @@ export const handleApiError = (error: unknown, special?: string): NormalizedErro
 
   if (typeof data?.message === "string") message = data.message;
   else if (Array.isArray(data?.message)) message = data.message[0];
-  else if (data?.errors) message = Object.values(data.errors)[0]?.[0] || message;
+  else if (data?.errors && typeof data.errors === 'object') {
+    const first = Object.values(data.errors as Record<string, string[]>)[0];
+    if (Array.isArray(first) && first.length > 0) message = first[0];
+  }
   else if (err.response.statusText) message = err.response.statusText;
 
   return { message: message.trim(), special: special ? getValueByPath(data, special) : "", status, isClientError: status >= 400 && status < 500 };
