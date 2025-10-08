@@ -17,4 +17,7 @@ const marketplaceItemSchema = new Schema<IMarketplaceItem>({
   status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
 }, { timestamps: true });
 
+marketplaceItemSchema.index({ title: 'text', description: 'text' });
+marketplaceItemSchema.index({ vendorId: 1, createdAt: -1 });
+
 export default mongoose.model<IMarketplaceItem>('MarketplaceItem', marketplaceItemSchema);

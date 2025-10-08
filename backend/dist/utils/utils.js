@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logAnalytics = exports.verifyRefreshToken = exports.generateAccessToken = exports.verifyToken = exports.generateRefreshToken = exports.generateToken = void 0;
+exports.asyncHandler = exports.AppError = exports.logAnalytics = exports.verifyRefreshToken = exports.generateAccessToken = exports.verifyToken = exports.generateRefreshToken = exports.generateToken = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const Analytics_1 = __importDefault(require("../models/Analytics"));
 const JWT_SECRET = process.env.JWT_SECRET || 'secret';
@@ -62,4 +62,20 @@ const logAnalytics = async (type, referenceId, action, extraData) => {
     }
 };
 exports.logAnalytics = logAnalytics;
+class AppError extends Error {
+    statusCode;
+    isOperational;
+    constructor(message, statusCode = 500) {
+        super(message);
+        this.statusCode = statusCode;
+        this.isOperational = true;
+    }
+}
+exports.AppError = AppError;
+const asyncHandler = (fn) => {
+    return (req, res, next) => {
+        Promise.resolve(fn(req, res, next)).catch(next);
+    };
+};
+exports.asyncHandler = asyncHandler;
 //# sourceMappingURL=utils.js.map

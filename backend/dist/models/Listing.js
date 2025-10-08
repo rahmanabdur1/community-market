@@ -42,5 +42,7 @@ const listingSchema = new mongoose_1.Schema({
     ownerId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Vendor' },
     status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
 }, { timestamps: true });
+listingSchema.index({ title: 'text', location: 'text' });
+listingSchema.index({ ownerId: 1, createdAt: -1 });
 exports.default = mongoose_1.default.model('Listing', listingSchema);
 //# sourceMappingURL=Listing.js.map

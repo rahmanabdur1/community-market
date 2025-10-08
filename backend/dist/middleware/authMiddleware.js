@@ -21,6 +21,7 @@ const protect = (req, res, next) => {
     try {
         const decoded = jsonwebtoken_1.default.verify(token, JWT_SECRET);
         req.user = { id: decoded.id };
+        req.userRole = decoded.roles?.[0] || 'user';
         next();
     }
     catch (err) {

@@ -10,8 +10,9 @@ const JWT_REFRESH_EXPIRES_IN = "7d"; // 7 days
 
 // 🔑 Generate Access & Refresh Tokens
 const generateTokens = (user: IUser) => {
-  const accessToken = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
-  const refreshToken = jwt.sign({ id: user._id }, JWT_REFRESH_SECRET, { expiresIn: JWT_REFRESH_EXPIRES_IN });
+  const payload = { id: user._id, roles: user.roles } as any;
+  const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+  const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: JWT_REFRESH_EXPIRES_IN });
   return { accessToken, refreshToken, expiresIn: 900, tokenType: "Bearer" };
 };
 

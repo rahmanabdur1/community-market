@@ -4,7 +4,8 @@ export interface IPayment extends Document {
     bookingId?: mongoose.Schema.Types.ObjectId;
     orderId?: mongoose.Schema.Types.ObjectId;
     amount: number;
-    method: string;
+    method: 'bkash' | 'nagad';
+    providerRef?: string;
     status: 'pending' | 'completed' | 'failed';
     createdAt: Date;
 }

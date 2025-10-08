@@ -41,5 +41,7 @@ const marketplaceItemSchema = new mongoose_1.Schema({
     vendorId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Vendor' },
     status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
 }, { timestamps: true });
+marketplaceItemSchema.index({ title: 'text', description: 'text' });
+marketplaceItemSchema.index({ vendorId: 1, createdAt: -1 });
 exports.default = mongoose_1.default.model('MarketplaceItem', marketplaceItemSchema);
 //# sourceMappingURL=MarketplaceItem.js.map

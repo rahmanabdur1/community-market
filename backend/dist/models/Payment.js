@@ -39,8 +39,11 @@ const paymentSchema = new mongoose_1.Schema({
     bookingId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Booking' },
     orderId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Order' },
     amount: { type: Number, required: true },
-    method: { type: String, required: true },
+    method: { type: String, enum: ['bkash', 'nagad'], required: true },
+    providerRef: { type: String },
     status: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },
 }, { timestamps: true });
+paymentSchema.index({ userId: 1, createdAt: -1 });
+paymentSchema.index({ method: 1, status: 1, createdAt: -1 });
 exports.default = mongoose_1.default.model('Payment', paymentSchema);
 //# sourceMappingURL=Payment.js.map

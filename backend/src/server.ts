@@ -2,6 +2,11 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
+import mongoSanitize from 'express-mongo-sanitize';
+import hpp from 'hpp';
 import connectDB from './config/db';
 
 // Import Routes
@@ -17,6 +22,7 @@ import postRoutes from './routes/postRoutes';
 import reviewRoutes from './routes/reviewRoutes';
 import supportRoutes from './routes/supportRoutes';
 import analyticsRoutes from './routes/analyticsRoutes';
+import { errorHandler, notFound } from './middleware/errorHandler';
 
 dotenv.config();
 connectDB();
@@ -25,12 +31,24 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:3000", // frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-API-KEY"], // include your custom header
-    credentials: true, // if you want cookies
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-API-KEY"],
+    credentials: true,
   })
 );
+app.use(helmet());
+app.use(compression());
+app.use(
+  rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 1000,
+    standardHeaders: true,
+    legacyHeaders: false,
+  })
+);
+app.use(mongoSanitize());
+app.use(hpp());
 
 
 app.use(express.json());
@@ -56,10 +74,8 @@ app.get('/', (req, res) => {
 });
 
 // Error handling middleware
-app.use((err: any, req: any, res: any, next: any) => {
-  console.error(err.stack);
-  res.status(500).json({ message: 'Server Error' });
-});
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {

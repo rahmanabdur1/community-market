@@ -38,55 +38,50 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkAvailability = exports.deleteListing = exports.approveListing = exports.updateListing = exports.getListingById = exports.getListings = exports.createListing = void 0;
 const Listing_1 = __importDefault(require("../models/Listing"));
-const createListing = async (req, res) => {
+const utils_1 = require("../utils/utils");
+exports.createListing = (0, utils_1.asyncHandler)(async (req, res) => {
     const listing = new Listing_1.default({ ...req.body, ownerId: req.user.id });
     await listing.save();
     res.status(201).json(listing);
-};
-exports.createListing = createListing;
-const getListings = async (req, res) => {
+});
+exports.getListings = (0, utils_1.asyncHandler)(async (req, res) => {
     const { q, location } = req.query;
     const filter = {};
     if (q)
         filter.title = { $regex: q, $options: 'i' };
     if (location)
         filter.location = { $regex: location, $options: 'i' };
-    const listings = await Listing_1.default.find(filter);
+    const listings = await Listing_1.default.find(filter).lean();
     res.json(listings);
-};
-exports.getListings = getListings;
-const getListingById = async (req, res) => {
-    const listing = await Listing_1.default.findById(req.params.id);
+});
+exports.getListingById = (0, utils_1.asyncHandler)(async (req, res) => {
+    const listing = await Listing_1.default.findById(req.params.id).lean();
     if (!listing)
-        return res.status(404).json({ message: 'Listing not found' });
+        throw new utils_1.AppError('Listing not found', 404);
     res.json(listing);
-};
-exports.getListingById = getListingById;
-const updateListing = async (req, res) => {
+});
+exports.updateListing = (0, utils_1.asyncHandler)(async (req, res) => {
     const listing = await Listing_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!listing)
-        return res.status(404).json({ message: 'Listing not found' });
+        throw new utils_1.AppError('Listing not found', 404);
     res.json(listing);
-};
-exports.updateListing = updateListing;
-const approveListing = async (req, res) => {
+});
+exports.approveListing = (0, utils_1.asyncHandler)(async (req, res) => {
     const listing = await Listing_1.default.findById(req.params.id);
     if (!listing)
-        return res.status(404).json({ message: 'Listing not found' });
+        throw new utils_1.AppError('Listing not found', 404);
     listing.status = req.body.status;
     await listing.save();
     res.json(listing);
-};
-exports.approveListing = approveListing;
-const deleteListing = async (req, res) => {
+});
+exports.deleteListing = (0, utils_1.asyncHandler)(async (req, res) => {
     const listing = await Listing_1.default.findByIdAndDelete(req.params.id);
     if (!listing)
-        return res.status(404).json({ message: 'Listing not found' });
+        throw new utils_1.AppError('Listing not found', 404);
     res.json({ message: 'Listing deleted successfully' });
-};
-exports.deleteListing = deleteListing;
+});
 // Check availability by date (available if no confirmed or pending booking exists for that date)
-const checkAvailability = async (req, res) => {
+exports.checkAvailability = (0, utils_1.asyncHandler)(async (req, res) => {
     const { date } = req.query;
     if (!date)
         return res.status(400).json({ message: 'date query param is required' });
@@ -94,6 +89,5 @@ const checkAvailability = async (req, res) => {
     const Booking = (await Promise.resolve().then(() => __importStar(require('../models/Booking')))).default;
     const existing = await Booking.findOne({ listingId: req.params.id, date: targetDate, status: { $in: ['pending', 'confirmed'] } });
     res.json({ available: !existing });
-};
-exports.checkAvailability = checkAvailability;
+});
 //# sourceMappingURL=listingController.js.map

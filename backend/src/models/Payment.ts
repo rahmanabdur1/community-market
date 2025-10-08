@@ -5,7 +5,8 @@ export interface IPayment extends Document {
   bookingId?: mongoose.Schema.Types.ObjectId;
   orderId?: mongoose.Schema.Types.ObjectId;
   amount: number;
-  method: string;
+  method: 'bkash' | 'nagad';
+  providerRef?: string; // trxId or transaction reference
   status: 'pending' | 'completed' | 'failed';
   createdAt: Date;
 }
@@ -15,8 +16,12 @@ const paymentSchema = new Schema<IPayment>({
   bookingId: { type: Schema.Types.ObjectId, ref: 'Booking' },
   orderId: { type: Schema.Types.ObjectId, ref: 'Order' },
   amount: { type: Number, required: true },
-  method: { type: String, required: true },
+  method: { type: String, enum: ['bkash', 'nagad'], required: true },
+  providerRef: { type: String },
   status: { type: String, enum: ['pending', 'completed', 'failed'], default: 'pending' },
 }, { timestamps: true });
+
+paymentSchema.index({ userId: 1, createdAt: -1 });
+paymentSchema.index({ method: 1, status: 1, createdAt: -1 });
 
 export default mongoose.model<IPayment>('Payment', paymentSchema);

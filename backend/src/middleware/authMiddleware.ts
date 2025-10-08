@@ -6,6 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "secret";
 // Define custom interface for JWT payload
 interface JwtPayload {
   id: string;
+  roles?: string[];
   iat?: number;
   exp?: number;
 }
@@ -40,6 +41,7 @@ export const protect = (req: Request, res: Response, next: NextFunction) => {
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
     req.user = { id: decoded.id };
+    (req as any).userRole = decoded.roles?.[0] || 'user';
     next();
   } catch (err) {
     res.status(401).json({ message: "Not authorized, invalid token" });

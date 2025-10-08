@@ -40,5 +40,7 @@ const bookingSchema = new mongoose_1.Schema({
     date: { type: Date, required: true },
     status: { type: String, enum: ['pending', 'confirmed', 'cancelled'], default: 'pending' },
 }, { timestamps: true });
+bookingSchema.index({ listingId: 1, date: 1 }, { unique: false });
+bookingSchema.index({ userId: 1, createdAt: -1 });
 exports.default = mongoose_1.default.model('Booking', bookingSchema);
 //# sourceMappingURL=Booking.js.map
